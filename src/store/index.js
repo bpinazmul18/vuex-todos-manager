@@ -1,18 +1,28 @@
 import { createStore } from "vuex";
+import axios from "axios";
 
 //Create a state instance.
 
 export const store = createStore({
   state: {
-    todos: [
-      { id: 1, title: "Todo one" },
-      { id: 2, title: "Todo two" },
-      { id: 3, title: "Todo three" },
-    ],
+    todos: [],
   },
   getters: {
     allTodos: (state) => state.todos,
   },
-  actions: {},
-  mutations: {},
+  actions: {
+    async fetchTodos({ commit }) {
+      try {
+        const res = await axios.get(
+          "https://jsonplaceholder.typicode.com/todos"
+        );
+        commit("setTodos", res.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    },
+  },
+  mutations: {
+    setTodos: (state, todos) => (state.todos = todos),
+  },
 });
