@@ -35,11 +35,20 @@ export const store = createStore({
         console.log(err.message);
       }
     },
+    async filterTodos({ commit }, amount) {
+      try {
+        const res = await axios.get(`${BASE_URL}?_limit=${amount}`);
+        commit("filterTodos", res.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    },
   },
   mutations: {
     setTodos: (state, todos) => (state.todos = todos),
     newTodo: (state, todo) => state.todos.unshift(todo),
     removeTodo: (state, id) =>
       (state.todos = state.todos.filter((todo) => todo.id !== id)),
+    filterTodos: (state, todos) => (state.todos = todos),
   },
 });
