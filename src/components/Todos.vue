@@ -4,6 +4,7 @@
     <div class="todos">
       <div v-for="todo in allTodos" :key="todo.id" class="todo">
         {{ todo.title }}
+        <i @click="onDelete(todo.id)" class="fas fa-trash-alt"></i>
       </div>
     </div>
   </div>
@@ -15,7 +16,10 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Todos",
   methods: {
-    ...mapActions(["fetchTodos"]),
+    ...mapActions(["fetchTodos", "deleteTodo"]),
+    onDelete(id) {
+      this.deleteTodo(id);
+    },
   },
   computed: {
     // mix the getters into computed with object spread operator
