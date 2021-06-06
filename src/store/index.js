@@ -1,8 +1,8 @@
 import { createStore } from "vuex";
 import axios from "axios";
 
-//Create a state instance.
 const BASE_URL = "https://jsonplaceholder.typicode.com/todos";
+
 export const store = createStore({
   state: {
     todos: [],
@@ -43,6 +43,14 @@ export const store = createStore({
         console.log(err.message);
       }
     },
+    async updateTodo({ commit }, updTodo) {
+      try {
+        const res = await axios.put(`${BASE_URL}/${updTodo.id}`, updTodo);
+        commit("updateTodo", res.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    },
   },
   mutations: {
     setTodos: (state, todos) => (state.todos = todos),
@@ -50,5 +58,11 @@ export const store = createStore({
     removeTodo: (state, id) =>
       (state.todos = state.todos.filter((todo) => todo.id !== id)),
     filterTodos: (state, todos) => (state.todos = todos),
+    updateTodo: (state, updTodo) => {
+      const index = state.todos.findIndex((todo) => todo.id === updTodo.id);
+      if (index !== -1) {
+        state.todos.splice(index, 1, updTodo);
+      }
+    },
   },
 });
